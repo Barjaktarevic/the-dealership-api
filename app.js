@@ -16,6 +16,7 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 mongoose.set('strictQuery', true);
 const connectDB = async () => {
@@ -35,5 +36,15 @@ const connectDB = async () => {
 connectDB()
 
 app.use(apiRouter)
+
+app.use((err, req, res, next) => {
+    console.log(err.message.substring(0, 4))
+    if (err.message.substring(0, 4) === 'Cast') {
+        res.json("That model or make doesn't exist.")
+    } else {
+        res.json(err.message)
+    }
+
+})
 
 
