@@ -16,9 +16,18 @@ exports.getAllModels = wrapAsync(async (req, res) => {
     const limit = req.query.limit
     const sort = req.query.sort
     const skip = req.query.skip
+    const make = req.query.make
 
-    const allModels = await Model.find({}).populate('makeId').sort({ productionStart: sort }).limit(limit).skip(skip)
-    res.json({ models: allModels })
+    if (make !== undefined) {
+        const oneMake = await Make.findOne({ abbreviation: make })
+        console.log(oneMake.id)
+        const allModelsFiltered = await Model.find({ makeId: oneMake.id }).populate('makeId').sort({ productionStart: sort }).limit(limit).skip(skip)
+        res.json(allModelsFiltered)
+    } else {
+        const allModels = await Model.find().populate('makeId').sort({ productionStart: sort }).limit(limit).skip(skip)
+        res.json({ models: allModels })
+    }
+
 })
 
 exports.getOneModel = wrapAsync(async (req, res) => {
@@ -30,7 +39,7 @@ exports.getOneModel = wrapAsync(async (req, res) => {
 
 exports.updateModel = wrapAsync(async (req, res) => {
     const { id } = req.params
-    const foundModel = await Model.findOneAndUpdate({ id: id }, { productionStart: req.body.productionStart })
+    const foundModel = await Model.findOneAndUpdate({ _id: id }, { productionStart: req.body.productionStart })
 
     res.json('Successfully updated production start year!')
 })
