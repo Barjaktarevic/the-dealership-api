@@ -10,6 +10,7 @@ const apiRouter = require('./routes/api')
 require('dotenv').config()
 const PORT = process.env.PORT || 4000
 const MONGO_URI = process.env.MONGO_URI
+const MONGO_ATLAS_URI = process.env.MONGO_ATLAS_URI
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'))
 }
@@ -21,7 +22,7 @@ app.use(express.urlencoded({ extended: true }))
 mongoose.set('strictQuery', true);
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(MONGO_URI, {
+        const conn = await mongoose.connect(MONGO_ATLAS_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         })
