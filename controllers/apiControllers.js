@@ -4,7 +4,7 @@ const wrapAsync = require('../utils/wrapAsync')
 
 exports.getAllMakes = wrapAsync(async (req, res) => {
     const allMakes = await Make.find({})
-    res.json({ makes: allMakes })
+    res.json(allMakes)
 })
 
 exports.getOneManufacturer = wrapAsync(async (req, res) => {
@@ -29,11 +29,11 @@ exports.getAllModels = wrapAsync(async (req, res) => {
 
     } else if (make === "All" && sort !== -1 && sort !== 1) {
         const allModels = await Model.find().populate('makeId').limit(5).skip((page - 1) * 5)
-        res.json({ models: allModels })
+        res.json(allModels)
 
     } else if (make === "All" && (sort === -1 || sort === 1)) {
         const allModels = await Model.find().populate('makeId').sort({ productionStart: sort }).limit(5).skip((page - 1) * 5)
-        res.json({ models: allModels })
+        res.json(allModels)
     }
 })
 
