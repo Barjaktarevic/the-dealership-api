@@ -13,21 +13,28 @@ exports.getOneManufacturer = wrapAsync(async (req, res) => {
 })
 
 exports.getAllModels = wrapAsync(async (req, res) => {
-    const limit = req.query.limit
-    const sort = req.query.sort
-    const skip = req.query.skip
+    const page = parseInt(req.query.page)
+    const sort = parseInt(req.query.sort)
     const make = req.query.make
 
-    if (make !== undefined) {
+    if (make !== undefined && sort !== -1 && sort !== 1) {
         const oneMake = await Make.findOne({ abbreviation: make })
-        console.log(oneMake.id)
-        const allModelsFiltered = await Model.find({ makeId: oneMake.id }).populate('makeId').sort({ productionStart: sort }).limit(limit).skip(skip)
+        const allModelsFiltered = await Model.find({ makeId: oneMake.id }).populate('makeId').limit(5).skip((page - 1) * 5)
         res.json(allModelsFiltered)
-    } else {
-        const allModels = await Model.find().populate('makeId').sort({ productionStart: sort }).limit(limit).skip(skip)
+
+    } else if (make !== undefined && (sort === -1 || sort === 1)) {
+        const oneMake = await Make.findOne({ abbreviation: make })
+        const allModelsFiltered = await Model.find({ makeId: oneMake.id }).populate('makeId').sort({ productionStart: sort }).limit(5).skip((page - 1) * 5)
+        res.json(allModelsFiltered)
+
+    } else if (make === undefined && sort !== -1 && sort !== 1) {
+        const allModels = await Model.find().populate('makeId').limit(5).skip((page - 1) * 5)
+        res.json({ models: allModels })
+
+    } else if (make === undefined && (sort === -1 || sort === 1)) {
+        const allModels = await Model.find().populate('makeId').sort({ productionStart: sort }).limit(5).skip((page - 1) * 5)
         res.json({ models: allModels })
     }
-
 })
 
 exports.getOneModel = wrapAsync(async (req, res) => {
