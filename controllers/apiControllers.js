@@ -17,21 +17,21 @@ exports.getAllModels = wrapAsync(async (req, res) => {
     const sort = parseInt(req.query.sort)
     const make = req.query.make
 
-    if (make !== undefined && sort !== -1 && sort !== 1) {
+    if (make !== "All" && sort !== -1 && sort !== 1) {
         const oneMake = await Make.findOne({ abbreviation: make })
         const allModelsFiltered = await Model.find({ makeId: oneMake.id }).populate('makeId').limit(5).skip((page - 1) * 5)
         res.json(allModelsFiltered)
 
-    } else if (make !== undefined && (sort === -1 || sort === 1)) {
+    } else if (make !== "All" && (sort === -1 || sort === 1)) {
         const oneMake = await Make.findOne({ abbreviation: make })
         const allModelsFiltered = await Model.find({ makeId: oneMake.id }).populate('makeId').sort({ productionStart: sort }).limit(5).skip((page - 1) * 5)
         res.json(allModelsFiltered)
 
-    } else if (make === undefined && sort !== -1 && sort !== 1) {
+    } else if (make === "All" && sort !== -1 && sort !== 1) {
         const allModels = await Model.find().populate('makeId').limit(5).skip((page - 1) * 5)
         res.json({ models: allModels })
 
-    } else if (make === undefined && (sort === -1 || sort === 1)) {
+    } else if (make === "All" && (sort === -1 || sort === 1)) {
         const allModels = await Model.find().populate('makeId').sort({ productionStart: sort }).limit(5).skip((page - 1) * 5)
         res.json({ models: allModels })
     }
