@@ -1,5 +1,5 @@
 const express = require('express')
-const { getAllMakes, getOneManufacturer, getAllModels, getOneModel, updateModel } = require('../controllers/apiControllers')
+const { getAllMakes, getOneManufacturer, getAllModels, getOneModel, updateModel, deleteModel, addModel, updateModelFull } = require('../controllers/apiControllers')
 const router = express.Router()
 const Make = require('../models/Make')
 const Model = require('../models/Model')
@@ -22,6 +22,18 @@ router.get('/models/:id', getOneModel)
 
 //  @desc   Update the production start year for one model
 //  @route  PUT /models/:id
-router.put('/models/:id', updateModel)
+// router.put('/models/:id', updateModel)
+
+//  @desc   Delete a model
+//  @route  DELETE /models/:id
+router.delete('/models/:id', deleteModel)
+
+//  @desc   Add a model
+//  @route  POST /models/:id
+router.post('/models', addModel)
+
+//  @desc   Update a model FULL
+//  @route  PUT /models/:id
+router.put('/models/:id', updateModelFull)
 
 module.exports = router

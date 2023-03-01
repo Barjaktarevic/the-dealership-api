@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }))
 mongoose.set('strictQuery', true);
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(MONGO_ATLAS_URI, {
+        const conn = await mongoose.connect(MONGO_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         })
