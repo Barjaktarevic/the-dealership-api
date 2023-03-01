@@ -20,16 +20,12 @@ router.get('/models', getAllModels)
 //  @route  GET /models/:id
 router.get('/models/:id', getOneModel)
 
-//  @desc   Update the production start year for one model
-//  @route  PUT /models/:id
-// router.put('/models/:id', updateModel)
-
 //  @desc   Delete a model
 //  @route  DELETE /models/:id
 router.delete('/models/:id', deleteModel)
 
 //  @desc   Add a model
-//  @route  POST /models/:id
+//  @route  POST /models
 router.post('/models', addModel)
 
 //  @desc   Update a model FULL

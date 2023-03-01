@@ -6,12 +6,12 @@ const isURL = require('../utils/isURL')
 
 exports.getAllMakes = wrapAsync(async (req, res) => {
     const allMakes = await Make.find({})
-    res.status(200).res.json(allMakes)
+    res.json(allMakes)
 })
 
 exports.getOneManufacturer = wrapAsync(async (req, res) => {
     const oneMake = await Make.find({ abbreviation: req.params.abbreviation })
-    res.status(200).res.json(oneMake)
+    res.json(oneMake)
 })
 // add check for valid make here
 
@@ -23,20 +23,20 @@ exports.getAllModels = wrapAsync(async (req, res) => {
     if (make !== "All" && sort !== -1 && sort !== 1) {
         const oneMake = await Make.findOne({ abbreviation: make })
         const allModelsFiltered = await Model.find({ makeId: oneMake.id }).populate('makeId').limit(5).skip((page - 1) * 5)
-        res.status(200).res.json(allModelsFiltered)
+        res.json(allModelsFiltered)
 
     } else if (make !== "All" && (sort === -1 || sort === 1)) {
         const oneMake = await Make.findOne({ abbreviation: make })
         const allModelsFiltered = await Model.find({ makeId: oneMake.id }).populate('makeId').sort({ productionStart: sort }).limit(5).skip((page - 1) * 5)
-        res.status(200).res.json(allModelsFiltered)
+        res.json(allModelsFiltered)
 
     } else if (make === "All" && sort !== -1 && sort !== 1) {
         const allModels = await Model.find().populate('makeId').limit(5).skip((page - 1) * 5)
-        res.status(200).res.json(allModels)
+        res.json(allModels)
 
     } else if (make === "All" && (sort === -1 || sort === 1)) {
         const allModels = await Model.find().populate('makeId').sort({ productionStart: sort }).limit(5).skip((page - 1) * 5)
-        res.status(200).res.json(allModels)
+        res.json(allModels)
     }
 })
 
@@ -44,7 +44,7 @@ exports.getOneModel = wrapAsync(async (req, res) => {
     const { id } = req.params
     const oneModelPopulated = await Model.findOne({ _id: id }).populate('makeId')
     console.log(oneModelPopulated)
-    res.status(200).res.json(oneModelPopulated)
+    res.json(oneModelPopulated)
 })
 // add checks for valid id there
 
