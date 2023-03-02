@@ -8,7 +8,7 @@ const Model = require('../models/Model')
 //  @route  GET /makes
 router.get('/makes', getAllMakes)
 
-//  @desc   Get one manufacturer
+//  @desc   Get all models by manufacturer on single page
 //  @route  GET /makes/:abbreviation
 router.get('/makes/:abbreviation', getOneManufacturer)
 

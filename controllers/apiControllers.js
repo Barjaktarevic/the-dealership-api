@@ -10,8 +10,8 @@ exports.getAllMakes = wrapAsync(async (req, res) => {
 })
 
 exports.getOneManufacturer = wrapAsync(async (req, res) => {
-    const oneMake = await Make.find({ abbreviation: req.params.abbreviation })
-    const allModelsByMake = await Model.find({ makeId: oneMake.id })
+    const oneMake = await Make.findOne({ abbreviation: req.params.abbreviation })
+    const allModelsByMake = await Model.find({ makeId: oneMake.id }).populate('makeId')
     res.json(allModelsByMake)
 })
 
