@@ -11,9 +11,9 @@ exports.getAllMakes = wrapAsync(async (req, res) => {
 
 exports.getOneManufacturer = wrapAsync(async (req, res) => {
     const oneMake = await Make.find({ abbreviation: req.params.abbreviation })
-    res.json(oneMake)
+    const allModelsByMake = await Model.find({ makeId: oneMake._id })
+    res.json(allModelsByMake)
 })
-// add check for valid make here
 
 exports.getAllModels = wrapAsync(async (req, res) => {
     const page = parseInt(req.query.page)
@@ -43,7 +43,6 @@ exports.getAllModels = wrapAsync(async (req, res) => {
 exports.getOneModel = wrapAsync(async (req, res) => {
     const { id } = req.params
     const oneModelPopulated = await Model.findOne({ _id: id }).populate('makeId')
-    console.log(oneModelPopulated)
     res.json(oneModelPopulated)
 })
 // add checks for valid id there
@@ -82,7 +81,6 @@ exports.addModel = wrapAsync(async (req, res) => {
     const foundMake = await Make.findOne({ abbreviation: make })
 
     const addedModel = new Model({ name, abbreviation, image, productionStart, makeId: foundMake.id })
-    console.log(addedModel)
     await addedModel.save()
     res.status(201).json({ message: 'Successfully added a new model.', addedModel: addedModel })
 })
@@ -107,7 +105,7 @@ exports.updateModelFull = wrapAsync(async (req, res) => {
         res.status(201).json('Successfully updated the model.')
         return
     } else {
-        res.status(400).json({ message: 'Please provide a valid model id.', foundModel: foundModel })
+        res.status(400).json('Please provide a valid model id.')
     }
 
 })
